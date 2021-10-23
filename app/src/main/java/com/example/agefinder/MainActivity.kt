@@ -2,20 +2,19 @@ package com.example.agefinder
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.telecom.Call
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 import java.util.*
 
+val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+var sc:Boolean = false
+
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        var userDob = edt_dob.text.toString()
-
-
 
         buttonGetAge.setOnClickListener{
 
@@ -26,31 +25,39 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-
-
-//            Toast.makeText(this, currentYear, Toast.LENGTH_SHORT).show()
-//            Toast.makeText(this,currentYear,Toast.LENGTH_SHORT)
-//            tv_dob.setText(date)
-//            if (date.length >0){
-//                tv_dob.setText(currentYear)
-//            }else{
-//                Toast.makeText(this,"Please Enter a date", Toast.LENGTH_SHORT).show()
-//            }
-
-
-//            ++times
-//            if(date.length == 0){
-//                textView.setText("Plese enter the date first")
-//            }
-            //textView.setText("Hey, you just clicked $times times $date")
         }
 
     }
 
+    fun dobValidate(age:Int):Boolean{
+        if(age >0 && age <= currentYear && age >= currentYear-150){
+            if (age < currentYear-100){
+                sc = true
+            }else{
+                sc = false
+            }
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
     fun ageCounter(){
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val age = currentYear - Integer.parseInt(edt_dob.text.toString())
-        tv_dob.text = "Your age now $age years."
+        var dob = Integer.parseInt(edt_dob.text.toString())
+        if(dobValidate(dob)){
+            val age = currentYear - dob
+            if (sc){
+                tv_dob.text = "Congratulation you are now $age years. You're most senior."
+                Toast.makeText(this,"Respect for seniors",Toast.LENGTH_LONG).show()
+            }else{
+                tv_dob.text = "Your age now $age years ."
+            }
+
+        }else{
+            Toast.makeText(this,"Year of Birth is not corret.",Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 
